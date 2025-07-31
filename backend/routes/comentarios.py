@@ -1,26 +1,27 @@
 from flask import Blueprint, request, jsonify
-from db.database import Database
+from db.database import get_db
 from services.auth import token_required
+from models import Comentario
 import uuid
 
 comentarios_bp = Blueprint('comentarios', __name__, url_prefix='/comentarios')
-db = Database()
+db = get_db()
 
 @comentarios_bp.route('/', methods=['GET'])
 @token_required
 def get_comentarios():
     # Implement logic to retrieve all comentarios from the database
-    query = "SELECT * FROM comentarios"
-    result = db.execute_query(query)
-    return jsonify(result)
+    comentarios = db.query(Comentario).all()
+    return jsonify([comentario.to_dict() for comentario in comentarios])
 
 @comentarios_bp.route('/<uuid:id>', methods=['GET'])
 @token_required
 def get_comentario(id):
     # Implement logic to retrieve a specific comentario by ID from the database
-    query = "SELECT * FROM comentarios WHERE id = %s"
-    result = db.fetch_one(query, (str(id),))
-    return jsonify(result)
+    comentario = db.query(Comentario).filter(Comentario.id == id).first()
+    if comentario:
+        return jsonify(comentario.to_dict())
+    return jsonify({'message': 'Comentario not found'})
 
 @comentarios_bp.route('/', methods=['POST'])
 @token_required
@@ -36,48 +37,53 @@ def create_comentario():
     clipe_id = data.get('clipe_id')
     show_id = data.get('show_id')
     comentario_id = uuid.uuid4()
-    query = "INSERT INTO comentarios (id, texto, categoria, confianca, origem, artista_id, album_id, clipe_id, show_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    params = (comentario_id, texto, categoria, confianca, origem, artista_id, album_id, clipe_id, show_id)
-    db.execute_query(query, params)
-    return jsonify({'message': 'Comentario created successfully'})
+    new_comentario = Comentario(id=comentario_id, texto=texto, categoria=categoria, confianca=confianca, origem=origem, artista_id=artista_id, album_id=album_id, clipe_id=clipe_id, show_id=show_id)
+    db.add(new_comentario)
+    db.commit()
+    return jsonify(new_comentario.to_dict())
 
 @comentarios_bp.route('/<uuid:id>', methods=['PUT'])
 @token_required
 def update_comentario(id):
     # Implement logic to update an existing comentario in the database
     data = request.get_json()
-    texto = data.get('texto')
-    categoria = data.get('categoria')
-    confianca = data.get('confianca')
-    origem = data.get('origem')
-    artista_id = data.get('artista_id')
-    album_id = data.get('album_id')
-    clipe_id = data.get('clipe_id')
-    show_id = data.get('show_id')
-    update_data = {}
-    if texto:
-        update_data['texto'] = texto
-    if categoria:
-        update_data['categoria'] = categoria
-    if confianca:
-        update_data['confianca'] = confianca
-    if origem:
-        update_data['origem'] = origem
-    if artista_id:
-        update_data['artista_id'] = artista_id
-    if album_id:
-        update_data['album_id'] = album_id
-    if clipe_id:
-        update_data['clipe_id'] = clipe_id
-    if show_id:
-        update_data['show_id'] = show_id
-    db.update_data("comentarios", str(id), update_data)
+    comentario = db.query(Comentario).filter(Comentario.id == id).first()
+    if comentario:
+        texto = data.get('texto')
+        categoria = data.get('categoria')
+        confianca = data.get('confianca')
+        origem = data.get('origem')
+        artista_id = data.get('artista_id')
+        album_id = data.get('album_id')
+        clipe_id = data.get('clipe_id')
+        show_id = data.get('show_id')
+        if texto:
+            comentario.texto = texto
+        if categoria:
+            comentario.categoria = categoria
+        if confianca:
+            comentario.confianca = confianca
+        if origem:
+            comentario.origem = origem
+        if artista_id:
+            comentario.artista_id = artista_id
+        if album_id:
+            comentario.album_id = album_id
+        if clipe_id:
+            comentario.clipe_id = clipe_id
+        if show_id:
+            comentario.show_id = show_id
+        db.commit()
+        return jsonify(comentario.to_dict())
     return jsonify({'message': f'Comentario with id {id} updated successfully'})
 
 @comentarios_bp.route('/<uuid:id>', methods=['DELETE'])
 @token_required
 def delete_comentario(id):
     # Implement logic to delete a specific comentario by ID from the database
-    where_condition = f"id = '{id}'"
-    db.delete_data("comentarios", where_condition)
-    return jsonify({'message': f'Comentario with id {id} deleted successfully'})
+    comentario = db.query(Comentario).filter(Comentario.id == id).first()
+    if comentario:
+        db.delete(comentario)
+        db.commit()
+        return jsonify({'message': f'Comentario with id {id} deleted successfully'})
+    return jsonify({'message': 'Comentario not found'})

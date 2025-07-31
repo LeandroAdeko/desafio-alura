@@ -1,25 +1,26 @@
 from flask import Blueprint, request, jsonify
-from db.database import Database
+from db.database import get_db
 from services.auth import token_required
+from models import ComentarioTag
 
 comentario_tags_bp = Blueprint('comentario_tags', __name__, url_prefix='/comentario_tags')
-db = Database()
+db = get_db()
 
 @comentario_tags_bp.route('/', methods=['GET'])
 @token_required
 def get_comentario_tags():
     # Implement logic to retrieve all comentario_tags from the database
-    query = "SELECT * FROM comentario_tags"
-    result = db.execute_query(query)
-    return jsonify(result)
+    comentario_tags = db.query(ComentarioTag).all()
+    return jsonify([comentario_tag.to_dict() for comentario_tag in comentario_tags])
 
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['GET'])
 @token_required
 def get_comentario_tag(comentario_id, tag_id):
     # Implement logic to retrieve a specific comentario_tag by ID from the database
-    query = "SELECT * FROM comentario_tags WHERE comentario_id = %s AND tag_id = %s"
-    result = db.fetch_one(query, (str(comentario_id), tag_id))
-    return jsonify(result)
+    comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()
+    if comentario_tag:
+        return jsonify(comentario_tag.to_dict())
+    return jsonify({'message': 'Comentario_tag not found'})
 
 @comentario_tags_bp.route('/', methods=['POST'])
 @token_required
@@ -28,16 +29,18 @@ def create_comentario_tag():
     data = request.get_json()
     comentario_id = data['comentario_id']
     tag_id = data['tag_id']
-    query = "INSERT INTO comentario_tags (comentario_id, tag_id) VALUES (%s, %s)"
-    params = (comentario_id, tag_id)
-    db.execute_query(query, params)
-    return jsonify({'message': 'Comentario_tag created successfully'})
+    new_comentario_tag = ComentarioTag(comentario_id=comentario_id, tag_id=tag_id)
+    db.add(new_comentario_tag)
+    db.commit()
+    return jsonify(new_comentario_tag.to_dict())
 
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['DELETE'])
 @token_required
 def delete_comentario_tag(comentario_id, tag_id):
     # Implement logic to delete a specific comentario_tag by ID from the database
-    query = "DELETE FROM comentario_tags WHERE comentario_id = %s AND tag_id = %s"
-    params = (str(comentario_id), tag_id)
-    db.execute_query(query, params)
-    return jsonify({'message': f'Comentario_tag with comentario_id {comentario_id} and tag_id {tag_id} deleted successfully'})
+    comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()
+    if comentario_tag:
+        db.delete(comentario_tag)
+        db.commit()
+        return jsonify({'message': f'Comentario_tag with comentario_id {comentario_id} and tag_id {tag_id} deleted successfully'})
+    return jsonify({'message': 'Comentario_tag not found'})

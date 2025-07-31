@@ -1,24 +1,26 @@
 from flask import Blueprint, request, jsonify
-from db.database import Database
+from db.database import get_db
 from services.auth import token_required
+from models import Tag
 
 tags_bp = Blueprint('tags', __name__, url_prefix='/tags')
-db = Database()
+db = get_db()
 
 @tags_bp.route('/', methods=['GET'])
 @token_required
 def get_tags():
     # Implement logic to retrieve all tags from the database
-    query = "SELECT * FROM tags"
-    result = db.execute_query(query)
-    return jsonify(result)
+    tags = db.query(Tag).all()
+    return jsonify([tag.to_dict() for tag in tags])
 
 @tags_bp.route('/<int:id>', methods=['GET'])
 @token_required
 def get_tag(id):
     # Implement logic to retrieve a specific tag by ID from the database
-    result = db.get_by_id("tags", id)
-    return jsonify(result)
+    tag = db.query(Tag).filter(Tag.id == id).first()
+    if tag:
+        return jsonify(tag.to_dict())
+    return jsonify({'message': 'Tag not found'})
 
 @tags_bp.route('/', methods=['POST'])
 @token_required
@@ -27,30 +29,35 @@ def create_tag():
     data = request.get_json()
     codigo = data['codigo']
     descricao = data['descricao']
-    query = "INSERT INTO tags (codigo, descricao) VALUES (%s, %s)"
-    params = (codigo, descricao)
-    db.execute_query(query, params)
-    return jsonify({'message': 'Tag created successfully'})
+    new_tag = Tag(codigo=codigo, descricao=descricao)
+    db.add(new_tag)
+    db.commit()
+    return jsonify(new_tag.to_dict())
 
 @tags_bp.route('/<int:id>', methods=['PUT'])
 @token_required
 def update_tag(id):
     # Implement logic to update an existing tag in the database
     data = request.get_json()
-    codigo = data.get('codigo')
-    descricao = data.get('descricao')
-    update_data = {}
-    if codigo:
-        update_data['codigo'] = codigo
-    if descricao:
-        update_data['descricao'] = descricao
-    db.update_data("tags", id, update_data)
-    return jsonify({'message': f'Tag with id {id} updated successfully'})
+    tag = db.query(Tag).filter(Tag.id == id).first()
+    if tag:
+        codigo = data.get('codigo')
+        descricao = data.get('descricao')
+        if codigo:
+            tag.codigo = codigo
+        if descricao:
+            tag.descricao = descricao
+        db.commit()
+        return jsonify(tag.to_dict())
+    return jsonify({'message': 'Tag not found'})
 
 @tags_bp.route('/<int:id>', methods=['DELETE'])
 @token_required
 def delete_tag(id):
     # Implement logic to delete a specific tag by ID from the database
-    where_condition = f"id = {id}"
-    db.delete_data("tags", where_condition)
-    return jsonify({'message': f'Tag with id {id} deleted successfully'})
+    tag = db.query(Tag).filter(Tag.id == id).first()
+    if tag:
+        db.delete(tag)
+        db.commit()
+        return jsonify({'message': f'Tag with id {id} deleted successfully'})
+    return jsonify({'message': 'Tag not found'})
