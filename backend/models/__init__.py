@@ -79,9 +79,9 @@ class ComentarioTag(Base):
 
 class CategoriaComentario(enum.Enum):
     ELOGIO = "ELOGIO"
-    CRITICA = "CRÍTICA"
-    SUGESTAO = "SUGESTÃO"
-    DUVIDA = "DÚVIDA"
+    CRITICA = "CRITICA"
+    SUGESTAO = "SUGESTAO"
+    DUVIDA = "DUVIDA"
     SPAM = "SPAM"
 
 
@@ -106,8 +106,10 @@ class Comentario(Base):
     comentario_tags = relationship("ComentarioTag", back_populates="comentario")
 
     def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != '_sa_instance_state'}
-
+        res = {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != '_sa_instance_state'}
+        res['categoria'] = res['categoria'].name
+        return res
+    
 class ResumoSemanal(Base):
     __tablename__ = "resumos_semanais"
 

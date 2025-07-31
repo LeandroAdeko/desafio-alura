@@ -3,6 +3,7 @@ from db.database import get_db
 from services.auth import token_required
 from models import Comentario
 import uuid
+from services.gemini import Gemini
 
 comentarios_bp = Blueprint('comentarios', __name__, url_prefix='/comentarios')
 db = get_db()
@@ -26,11 +27,15 @@ def get_comentario(id):
 @comentarios_bp.route('/', methods=['POST'])
 @token_required
 def create_comentario():
+    ai = Gemini()
     # Implement logic to create a new comentario in the database
     data = request.get_json()
     texto = data['texto']
-    categoria = data['categoria']
-    confianca = data['confianca']
+
+    result = ai.classify_comment(texto)
+    categoria = result.classificacao
+    confianca = result.confianca
+
     origem = data['origem']
     artista_id = data.get('artista_id')
     album_id = data.get('album_id')

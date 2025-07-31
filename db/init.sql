@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS tags (
 CREATE TABLE IF NOT EXISTS comentarios (
     id UUID PRIMARY KEY,
     texto TEXT NOT NULL,
-    categoria TEXT NOT NULL CHECK (categoria IN ('ELOGIO', 'CRÍTICA', 'SUGESTÃO', 'DÚVIDA', 'SPAM')),
+    categoria TEXT NOT NULL CHECK (categoria IN ('ELOGIO', 'CRITICA', 'SUGESTAO', 'DUVIDA', 'SPAM')),
     confianca FLOAT CHECK (confianca BETWEEN 0 AND 1),
     origem TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
