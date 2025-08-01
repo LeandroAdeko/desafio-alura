@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Ping from './pages/teste'
+import LoginScreen from './pages/Login'
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Ping />
-  </StrictMode>,
+    <LoginScreen />
+  </StrictMode>
 )

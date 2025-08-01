@@ -1,5 +1,5 @@
 import os
-
+from functools import wraps
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -22,3 +22,14 @@ def get_db():
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     return db
+
+def with_db(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        db = SessionLocal()
+        try:
+            return f(*args, db)
+        finally:
+            db.close()
+    return decorated_function

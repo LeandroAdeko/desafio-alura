@@ -1,0 +1,21 @@
+form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    gap: 30px;
+    border: 1px solid;
+    border-radius: 15px;
+    padding: 40px 60px;
+}
+
+.label-input {
+    display: flex;
+    flex-direction: column;
+}
+
+div#login-form {
+    display: flex
+;
+    justify-content: center;
+    margin: 50px;
+}

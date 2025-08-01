@@ -5,7 +5,7 @@ from routes.comentario_tags import comentario_tags_bp
 from routes.comentarios import comentarios_bp
 from routes.resumos_semanais import resumos_semanais_bp
 from routes.shows import shows_bp
-from routes.usuarios import usuarios_bp
+from routes.usuario import account_bp
 from routes.tags import tags_bp
 
 
@@ -14,7 +14,7 @@ blueprints = [
     artistas_bp,
     avaliacoes_modelo_bp,
     comentario_tags_bp,
-    usuarios_bp,
+    account_bp,
     comentarios_bp,
     resumos_semanais_bp,
     shows_bp,

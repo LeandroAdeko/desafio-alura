@@ -1,9 +1,16 @@
 from flask import Flask
 from flask_cors import CORS
 from routes import blueprints
+from flask_jwt_extended import JWTManager
+import os
+
 
 app = Flask(__name__)
+
 CORS(app)
+
+app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
+jwt = JWTManager(app)
 
 for bp in blueprints:
     app.register_blueprint(bp)

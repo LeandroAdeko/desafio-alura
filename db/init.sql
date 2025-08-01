@@ -1,9 +1,9 @@
 -- Tabela de usuários (painel privado)
 CREATE TABLE IF NOT EXISTS usuarios (
     id SERIAL PRIMARY KEY,
-    nome TEXT NOT NULL,
+    username TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    senha_hash TEXT NOT NULL,
+    hashed_password TEXT NOT NULL,
     is_admin BOOLEAN DEFAULT FALSE
 );
 

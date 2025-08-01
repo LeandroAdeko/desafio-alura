@@ -1,15 +1,12 @@
-from sqlalchemy import Column, Integer, Float, Boolean, String, Date, DateTime, ForeignKey, Enum
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
-from datetime import datetime
 import enum
 import uuid
+from datetime import datetime
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, Integer, Float, Boolean, String, Date, DateTime, ForeignKey, Enum
 
 from db.database import Base
 
-class BaseClass:
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns if c.name != '_sa_instance_state'}
 
 class Album(Base):
     __tablename__ = "albuns"
@@ -84,7 +81,6 @@ class CategoriaComentario(enum.Enum):
     DUVIDA = "DUVIDA"
     SPAM = "SPAM"
 
-
 class Comentario(Base):
     __tablename__ = "comentarios"
 
@@ -152,9 +148,9 @@ class Usuario(Base):
     __tablename__ = "usuarios"
 
     id = Column(Integer, primary_key=True, index=True)
-    nome = Column(String, nullable=False)
+    username = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
-    senha_hash = Column(String, nullable=False)
+    hashed_password = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
 
     def to_dict(self):
