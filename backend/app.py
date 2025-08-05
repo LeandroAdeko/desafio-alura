@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from routes import blueprints
 from flask_jwt_extended import JWTManager
@@ -7,8 +7,16 @@ import os
 
 app = Flask(__name__)
 
-CORS(app)
-
+frontend_url = os.environ.get("FRONTEND_URL")
+CORS(
+    app,
+    supports_credentials=True,
+    origin=frontend_url,
+    allow_headers=["Content-Type", "Authorization"],
+    expose_headers=["Authorization"],
+    methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    resources={r"/*": {"origins": frontend_url}},
+)
 app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY")
 jwt = JWTManager(app)
 

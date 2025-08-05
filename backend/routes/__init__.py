@@ -7,6 +7,7 @@ from routes.resumos_semanais import resumos_semanais_bp
 from routes.shows import shows_bp
 from routes.usuario import account_bp
 from routes.tags import tags_bp
+from routes.clipes import clipes_bp
 
 
 blueprints = [
@@ -18,5 +19,6 @@ blueprints = [
     comentarios_bp,
     resumos_semanais_bp,
     shows_bp,
-    tags_bp
+    tags_bp,
+    clipes_bp
 ]

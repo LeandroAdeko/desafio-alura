@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import login from '../services/login';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,8 +18,9 @@ const LoginForm = () => {
       console.log(data);
 
       if (response.ok) {
-        sessionStorage.setItem('accessToken', data.access_token);
-        alert('Login successful!');
+        localStorage.setItem('accessToken', data.access_token);
+        localStorage.setItem('isAdmin', data.is_admin);
+        navigate('/');
         // Redirect or update UI as needed
       } else {
         console.log(data);

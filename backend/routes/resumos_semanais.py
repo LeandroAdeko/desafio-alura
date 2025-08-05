@@ -1,20 +1,20 @@
 from flask import Blueprint, request, jsonify
 from db.database import get_db
-from services.auth import token_required
 from models import ResumoSemanal
+from flask_jwt_extended import jwt_required
 
 resumos_semanais_bp = Blueprint('resumos_semanais', __name__, url_prefix='/resumos_semanais')
 db = get_db()
 
-@resumos_semanais_bp.route('/', methods=['GET'])
-@token_required
+@resumos_semanais_bp.route('', methods=['GET'])
+#@jwt_required()
 def get_resumos_semanais():
     # Implement logic to retrieve all resumos_semanais from the database
     resumos_semanais = db.query(ResumoSemanal).all()
     return jsonify([resumo_semanal.to_dict() for resumo_semanal in resumos_semanais])
 
 @resumos_semanais_bp.route('/<int:id>', methods=['GET'])
-@token_required
+#@jwt_required()
 def get_resumo_semanal(id):
     # Implement logic to retrieve a specific resumo_semanal by ID from the database
     resumo_semanal = db.query(ResumoSemanal).filter(ResumoSemanal.id == id).first()
@@ -22,8 +22,8 @@ def get_resumo_semanal(id):
         return jsonify(resumo_semanal.to_dict())
     return jsonify({'message': 'Resumo semanal not found'})
 
-@resumos_semanais_bp.route('/', methods=['POST'])
-@token_required
+@resumos_semanais_bp.route('', methods=['POST'])
+#@jwt_required()
 def create_resumo_semanal():
     # Implement logic to create a new resumo_semanal in the database
     data = request.get_json()
@@ -35,7 +35,7 @@ def create_resumo_semanal():
     return jsonify(new_resumo_semanal.to_dict())
 
 @resumos_semanais_bp.route('/<int:id>', methods=['PUT'])
-@token_required
+#@jwt_required()
 def update_resumo_semanal(id):
     # Implement logic to update an existing resumo_semanal in the database
     data = request.get_json()
@@ -52,7 +52,7 @@ def update_resumo_semanal(id):
     return jsonify({'message': 'Resumo semanal not found'})
 
 @resumos_semanais_bp.route('/<int:id>', methods=['DELETE'])
-@token_required
+#@jwt_required()
 def delete_resumo_semanal(id):
     # Implement logic to delete a specific resumo_semanal by ID from the database
     resumo_semanal = db.query(ResumoSemanal).filter(ResumoSemanal.id == id).first()

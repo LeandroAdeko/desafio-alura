@@ -50,7 +50,6 @@ CREATE TABLE IF NOT EXISTS comentarios (
     texto TEXT NOT NULL,
     categoria TEXT NOT NULL CHECK (categoria IN ('ELOGIO', 'CRITICA', 'SUGESTAO', 'DUVIDA', 'SPAM')),
     confianca FLOAT CHECK (confianca BETWEEN 0 AND 1),
-    origem TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     artista_id INTEGER REFERENCES artistas(id),
     album_id INTEGER REFERENCES albuns(id),

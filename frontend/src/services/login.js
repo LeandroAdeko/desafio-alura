@@ -15,7 +15,6 @@ async function login(email, password, options = {}) {
       }),
       ...options,
       headers,
-      mode: 'cors',
     });
 
     if (!response.ok) {

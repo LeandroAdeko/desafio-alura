@@ -1,10 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import LoginScreen from './pages/Login'
+import NavBar from './components/NavBar'
+import "./style.css"
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LoginScreen />
+    <NavBar />
   </StrictMode>
 )

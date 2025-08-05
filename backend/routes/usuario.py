@@ -3,7 +3,6 @@ import bcrypt
 from flask import Blueprint, request, jsonify
 from db.database import get_db
 from models import Usuario
-from services.auth import token_required
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -22,8 +21,8 @@ def verify_password(plain_password, hashed_password):
     return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
-@account_bp.route('/', methods=['POST'])
-@token_required
+@account_bp.route('', methods=['POST'])
+#@jwt_required()
 def create_user():
     data = request.get_json()
     db_user = get_user_by_email(data.get('email'))
@@ -49,7 +48,7 @@ def login():
 
     logging.info(data)
     
-    user = get_user_by_email(data.get('email'))
+    user: Usuario = get_user_by_email(data.get('email'))
 
     if not user:
         return jsonify({"message": "Email ou senha incorretos"}), 401
@@ -57,11 +56,11 @@ def login():
         return jsonify({"message": "Email ou senha incorretos"}), 401
     
     access_token = create_access_token(identity=user.email)
-    return jsonify({"message": "Login bem sucedido", "access_token": access_token}), 200
+    return jsonify({"message": "Login bem sucedido", "access_token": access_token, "is_admin": user.is_admin}), 200
 
 
 @account_bp.route('/<int:id>', methods=['GET'])
-@token_required
+#@jwt_required()
 def get_user(id):
     user = db.query(Usuario).filter(Usuario.id == id).first()
     if user:
@@ -69,8 +68,8 @@ def get_user(id):
     return jsonify({'message': 'Usuario não encontrado'})
 
 
-@account_bp.route('/', methods=['PATCH'])
-@token_required
+@account_bp.route('', methods=['PATCH'])
+#@jwt_required()
 def update_password():
     data = request.get_json()
     id = data.get('id')
@@ -93,8 +92,8 @@ def update_password():
     return jsonify({'message': 'Senha atualizada'}), 200
 
     
-@account_bp.route('/', methods=['DELETE'])
-@token_required
+@account_bp.route('', methods=['DELETE'])
+#@jwt_required()
 def delete_usuario():
     data = request.get_json()
 
@@ -110,7 +109,7 @@ def delete_usuario():
 
 
 @account_bp.route("/protected", methods=["GET"])
-@jwt_required()
+#@jwt_required()
 def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()

@@ -1,0 +1,12 @@
+
+div#home-list {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.home-item {
+
+    & ul {
+        width: 350px;
+    }
+}

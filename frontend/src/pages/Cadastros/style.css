@@ -1,0 +1,40 @@
+
+
+.label-input {
+    display: flex;
+    flex-direction: column;
+}
+
+div#login-form {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}
+
+#cadastros {
+    display: flex;
+    gap: 30px;
+    height: fit-content;
+    flex-wrap: wrap;
+
+    & form {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        gap: 30px;
+        border: 1px solid;
+        border-radius: 15px;
+        padding: 40px 60px;
+        flex-grow: 1;
+        justify-content: space-between;
+        min-height: 400px;
+
+        & * {
+            width: 100%;
+        }
+    }
+}
+.cadastro-form {
+    display: flex;
+
+}

@@ -88,7 +88,6 @@ class Comentario(Base):
     texto = Column(String, nullable=False)
     categoria = Column(Enum(CategoriaComentario), nullable=False)
     confianca = Column(Float)
-    origem = Column(String)
     criado_em = Column(DateTime, default=datetime.now)
     artista_id = Column(Integer, ForeignKey("artistas.id"))
     album_id = Column(Integer, ForeignKey("albuns.id"))

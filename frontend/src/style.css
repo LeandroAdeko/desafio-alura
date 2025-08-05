@@ -1,0 +1,90 @@
+:root{
+    --color-primary: #2BDEFD;
+    --color-title: #D7F9FF;
+    --color-text: #98D4DE;
+    --color-bg-darkhome: #01080E;
+    --btn-color-bg: #2BFDBE;
+    --btn-color-text: #01080E;
+    --fiap-primary: #E81B5C;
+    --nav-bg: #021017;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    color: var(--color-text);
+    border-radius: 5px;
+    border: unset;
+}
+
+body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+}
+
+input, button, textarea, select {
+    font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+}
+
+body {
+    margin: unset!important;
+    background: var(--color-bg-darkhome);
+    
+}
+
+#main-nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    background: var(--nav-bg);
+    color: var(--color-title);
+    & a:visited {
+        color: var(--color-title);
+    }
+    & a:hover {
+        color: var(--btn-color-bg);
+    }
+    
+    & a:webkit-any-link {
+        text-decoration: none;
+
+    }
+}
+
+.nav-item {
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    color: var(--btn-color-text);
+    background-color: var(--btn-color-bg);
+    border: 2px solid var(--btn-color-bg);
+    padding: 5px;
+}
+button:hover {
+    background-color: var(--color-title);
+
+}
+
+input {
+    padding-left: 10px;
+}

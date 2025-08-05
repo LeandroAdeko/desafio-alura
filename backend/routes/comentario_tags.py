@@ -1,20 +1,20 @@
 from flask import Blueprint, request, jsonify
 from db.database import get_db
-from services.auth import token_required
 from models import ComentarioTag
+from flask_jwt_extended import jwt_required
 
 comentario_tags_bp = Blueprint('comentario_tags', __name__, url_prefix='/comentario_tags')
 db = get_db()
 
-@comentario_tags_bp.route('/', methods=['GET'])
-@token_required
+@comentario_tags_bp.route('', methods=['GET'])
+#@jwt_required()
 def get_comentario_tags():
     # Implement logic to retrieve all comentario_tags from the database
     comentario_tags = db.query(ComentarioTag).all()
     return jsonify([comentario_tag.to_dict() for comentario_tag in comentario_tags])
 
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['GET'])
-@token_required
+#@jwt_required()
 def get_comentario_tag(comentario_id, tag_id):
     # Implement logic to retrieve a specific comentario_tag by ID from the database
     comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()
@@ -22,8 +22,8 @@ def get_comentario_tag(comentario_id, tag_id):
         return jsonify(comentario_tag.to_dict())
     return jsonify({'message': 'Comentario_tag not found'})
 
-@comentario_tags_bp.route('/', methods=['POST'])
-@token_required
+@comentario_tags_bp.route('', methods=['POST'])
+#@jwt_required()
 def create_comentario_tag():
     # Implement logic to create a new comentario_tag in the database
     data = request.get_json()
@@ -35,7 +35,7 @@ def create_comentario_tag():
     return jsonify(new_comentario_tag.to_dict())
 
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['DELETE'])
-@token_required
+#@jwt_required()
 def delete_comentario_tag(comentario_id, tag_id):
     # Implement logic to delete a specific comentario_tag by ID from the database
     comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()

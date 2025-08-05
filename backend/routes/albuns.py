@@ -1,43 +1,40 @@
 from flask import Blueprint, request, jsonify
 from db.database import get_db
-from services.auth import token_required
 from models import Album
+from flask_jwt_extended import jwt_required
 
 albuns_bp = Blueprint('albuns', __name__, url_prefix='/albuns')
 db = get_db()
 
-@albuns_bp.route('/', methods=['GET'])
-@token_required
+@albuns_bp.route('', methods=['GET'])
+#@jwt_required()
 def get_albuns():
-    # Implement logic to retrieve all albuns from the database
     albuns = db.query(Album).all()
     return jsonify([album.to_dict() for album in albuns])
 
 @albuns_bp.route('/<int:id>', methods=['GET'])
-@token_required
+#@jwt_required()
 def get_album(id):
-    # Implement logic to retrieve a specific album by ID from the database
     album = db.query(Album).filter(Album.id == id).first()
     if album:
         return jsonify(album.to_dict())
     return jsonify({'message': 'Album not found'})
 
-@albuns_bp.route('/', methods=['POST'])
-@token_required
+@albuns_bp.route('', methods=['POST'])
+#@jwt_required()
 def create_album():
-    # Implement logic to create a new album in the database
     data = request.get_json()
     nome = data['nome']
+    lancamento = data['lancamento']
     artista_id = data['artista_id']
-    new_album = Album(nome=nome, artista_id=artista_id)
+    new_album = Album(nome=nome, artista_id=artista_id, lancamento=lancamento)
     db.add(new_album)
     db.commit()
     return jsonify(new_album.to_dict())
 
 @albuns_bp.route('/<int:id>', methods=['PUT'])
-@token_required
+#@jwt_required()
 def update_album(id):
-    # Implement logic to update an existing album in the database
     data = request.get_json()
     album = db.query(Album).filter(Album.id == id).first()
     if album:
@@ -52,9 +49,8 @@ def update_album(id):
     return jsonify({'message': 'Album not found'})
 
 @albuns_bp.route('/<int:id>', methods=['DELETE'])
-@token_required
+#@jwt_required()
 def delete_album(id):
-    # Implement logic to delete a specific album by ID from the database
     album = db.query(Album).filter(Album.id == id).first()
     if album:
         db.delete(album)
