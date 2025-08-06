@@ -1,21 +1,15 @@
-form {
+#charts {
     display: flex;
-    flex-direction: column;
-    width: 400px;
-    gap: 30px;
-    border: 1px solid;
-    border-radius: 15px;
-    padding: 40px 60px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 50px;
+    max-width: 1200px;
+    margin: auto;
 }
 
-.label-input {
-    display: flex;
-    flex-direction: column;
-}
-
-div#login-form {
-    display: flex
-;
-    justify-content: center;
-    margin: 50px;
+.chart {
+    width: 350px;
+    min-width: 200px;
+    min-height: 300px;
 }

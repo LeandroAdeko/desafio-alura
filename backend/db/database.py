@@ -1,6 +1,8 @@
 import os
+import logging
 from functools import wraps
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import Row
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -33,3 +35,13 @@ def with_db(f):
         finally:
             db.close()
     return decorated_function
+
+def execute_query(query):
+    con = engine.connect()
+    try:
+        result = con.execute(text(query))
+
+        rows = [tuple(row) for row in result]
+        return rows
+    except Exception as e:
+        raise e

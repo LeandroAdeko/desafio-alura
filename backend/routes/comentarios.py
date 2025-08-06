@@ -4,6 +4,9 @@ from models import Comentario
 import uuid
 from services.gemini import Gemini
 from flask_jwt_extended import jwt_required
+import asyncio
+import aiohttp
+import logging
 
 comentarios_bp = Blueprint('comentarios', __name__, url_prefix='/comentarios')
 db = get_db()
@@ -40,8 +43,9 @@ def create_comentario():
     album_id = data.get('album_id')
     clipe_id = data.get('clipe_id')
     show_id = data.get('show_id')
+    criado_em = data.get('criado_em')
     comentario_id = uuid.uuid4()
-    new_comentario = Comentario(id=comentario_id, texto=texto, categoria=categoria, confianca=confianca, artista_id=artista_id, album_id=album_id, clipe_id=clipe_id, show_id=show_id)
+    new_comentario = Comentario(id=comentario_id, texto=texto, categoria=categoria, confianca=confianca, artista_id=artista_id, album_id=album_id, clipe_id=clipe_id, show_id=show_id, criado_em=criado_em)
     db.add(new_comentario)
     db.commit()
     return jsonify(new_comentario.to_dict())
@@ -88,3 +92,58 @@ def delete_comentario(id):
         db.commit()
         return jsonify({'message': f'Comentario with id {id} deleted successfully'})
     return jsonify({'message': 'Comentario not found'})
+
+# async def create_comentario(data):
+#     ai = Gemini()
+#     texto = data['texto']
+
+#     result = ai.classify_comment(texto)
+#     categoria = result.classificacao
+#     confianca = result.confianca
+
+#     artista_id = data.get('artista_id')
+#     album_id = data.get('album_id')
+#     clipe_id = data.get('clipe_id')
+#     show_id = data.get('show_id')
+#     criado_em = data.get('criado_em')
+#     comentario_id = uuid.uuid4()
+#     new_comentario = Comentario(id=comentario_id, texto=texto, categoria=categoria, confianca=confianca, artista_id=artista_id, album_id=album_id, clipe_id=clipe_id, show_id=show_id, criado_em=criado_em)
+#     return new_comentario
+
+# async def enviar_comentarios_lote(session, comentarios):
+#     db = get_db()
+#     for comentario in comentarios:
+#         db.add(comentario)
+#     db.commit()
+#     return [comentario.to_dict() for comentario in comentarios]
+
+# @comentarios_bp.route('/lote', methods=['POST'])
+# async def create_comentarios_lote():
+#     data = request.get_json()  # Recebe uma lista de comentários
+#     if not isinstance(data, list):
+#         return jsonify({'message': 'Expected a list of comments'}), 400
+
+#     comentarios = []
+#     for comentario_data in data:
+#         comentario = await create_comentario(comentario_data)
+#         comentarios.append(comentario)
+    
+#     tentativas = 0
+#     while tentativas < 2:
+#         try:
+#             async with aiohttp.ClientSession() as session:
+#                 result = await enviar_comentarios_lote(session, comentarios)
+#                 return jsonify(result), 201
+#         except aiohttp.ClientResponseError as e:
+#             if e.status == 503:
+#                 tentativas += 1
+#                 print(f"Erro 503 ao enviar lote. Tentativa {tentativas}/2. Aguardando 10 segundos...")
+#                 await asyncio.sleep(10)
+#             else:
+#                 print(f"Erro ao enviar lote: {e}")
+#                 return jsonify({'message': 'Erro ao criar lote de comentários'}), 500
+#         except Exception as e:
+#             print(f"Erro ao enviar lote: {e}")
+#             return jsonify({'message': 'Erro ao criar lote de comentários'}), 500
+#     print("Erro ao enviar lote após 2 tentativas. Abortando.")
+#     return jsonify({'message': 'Erro ao criar lote de comentários após várias tentativas'}), 500
