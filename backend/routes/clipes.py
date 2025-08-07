@@ -7,16 +7,14 @@ clipes_bp = Blueprint('clipes', __name__, url_prefix='/clipes')
 db = get_db()
 
 @clipes_bp.route('', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def get_clipes():
-    # Implement logic to retrieve all clipes from the database
     clipes = db.query(Clipe).all()
     return jsonify([clipe.to_dict() for clipe in clipes])
 
 @clipes_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_clipe(id):
-    # Implement logic to retrieve a specific clipe by ID from the database
     clipe = db.query(Clipe).filter(Clipe.id == id).first()
     if clipe:
         return jsonify(clipe.to_dict())
@@ -25,7 +23,6 @@ def get_clipe(id):
 @clipes_bp.route('', methods=['POST'])
 @jwt_required()
 def create_clipe():
-    # Implement logic to create a new clipe in the database
     data = request.get_json()
     nome = data['nome']
     artista_id = data['artista_id']
@@ -37,7 +34,6 @@ def create_clipe():
 @clipes_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_clipe(id):
-    # Implement logic to update an existing clipe in the database
     data = request.get_json()
     clipe = db.query(Clipe).filter(Clipe.id == id).first()
     if clipe:
@@ -54,7 +50,6 @@ def update_clipe(id):
 @clipes_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_clipe(id):
-    # Implement logic to delete a specific clipe by ID from the database
     clipe = db.query(Clipe).filter(Clipe.id == id).first()
     if clipe:
         db.delete(clipe)

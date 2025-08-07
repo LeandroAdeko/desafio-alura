@@ -8,9 +8,8 @@ artistas_bp = Blueprint('artistas', __name__, url_prefix='/artistas')
 db = get_db()
 
 @artistas_bp.route('', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def get_artistas():
-    # Implement logic to retrieve all artistas from the database
     artistas = db.query(Artista).all()
     result = [artista.to_dict() for artista in artistas]
     # logging.warning(result)
@@ -19,7 +18,6 @@ def get_artistas():
 @artistas_bp.route('/<int:id>', methods=['GET'])
 @jwt_required()
 def get_artista(id):
-    # Implement logic to retrieve a specific artista by ID from the database
     artista = db.query(Artista).filter(Artista.id == id).first()
     if artista:
         return jsonify(artista.to_dict())
@@ -51,7 +49,6 @@ def update_artista(id):
 @artistas_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_artista(id):
-    # Implement logic to delete a specific artista by ID from the database
     artista = db.query(Artista).filter(Artista.id == id).first()
     if artista:
         db.delete(artista)

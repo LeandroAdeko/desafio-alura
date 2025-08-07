@@ -4,9 +4,6 @@ from models import Comentario
 import uuid
 from services.gemini import Gemini
 from flask_jwt_extended import jwt_required
-import asyncio
-import aiohttp
-import logging
 
 comentarios_bp = Blueprint('comentarios', __name__, url_prefix='/comentarios')
 db = get_db()
@@ -14,14 +11,12 @@ db = get_db()
 @comentarios_bp.route('', methods=['GET'])
 @jwt_required()
 def get_comentarios():
-    # Implement logic to retrieve all comentarios from the database
     comentarios = db.query(Comentario).all()
     return jsonify([comentario.to_dict() for comentario in comentarios])
 
 @comentarios_bp.route('/<uuid:id>', methods=['GET'])
 @jwt_required()
 def get_comentario(id):
-    # Implement logic to retrieve a specific comentario by ID from the database
     comentario = db.query(Comentario).filter(Comentario.id == id).first()
     if comentario:
         return jsonify(comentario.to_dict())
@@ -31,7 +26,6 @@ def get_comentario(id):
 @jwt_required()
 def create_comentario():
     ai = Gemini()
-    # Implement logic to create a new comentario in the database
     data = request.get_json()
     texto = data['texto']
 
@@ -53,7 +47,6 @@ def create_comentario():
 @comentarios_bp.route('/<uuid:id>', methods=['PUT'])
 @jwt_required()
 def update_comentario(id):
-    # Implement logic to update an existing comentario in the database
     data = request.get_json()
     comentario = db.query(Comentario).filter(Comentario.id == id).first()
     if comentario:
@@ -85,7 +78,6 @@ def update_comentario(id):
 @comentarios_bp.route('/<uuid:id>', methods=['DELETE'])
 @jwt_required()
 def delete_comentario(id):
-    # Implement logic to delete a specific comentario by ID from the database
     comentario = db.query(Comentario).filter(Comentario.id == id).first()
     if comentario:
         db.delete(comentario)

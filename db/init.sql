@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS comentario_tags (
 
 -- Inserts dos dados
 INSERT INTO usuarios (username, email, hashed_password, is_admin) VALUES
+    ('normal', 'normal@normal.com', '$2b$12$x12UsEqzhvXJQYCtKBXcheKHzOj1R/RLx5FM1rcu3VG8jYHOkGGVu' , false),
     ('Admin', 'admin@admin.com', '$2b$12$x12UsEqzhvXJQYCtKBXcheKHzOj1R/RLx5FM1rcu3VG8jYHOkGGVu' , true);
 
 -- Artistas

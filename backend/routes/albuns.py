@@ -7,7 +7,7 @@ albuns_bp = Blueprint('albuns', __name__, url_prefix='/albuns')
 db = get_db()
 
 @albuns_bp.route('', methods=['GET'])
-@jwt_required()
+# @jwt_required()
 def get_albuns():
     albuns = db.query(Album).all()
     return jsonify([album.to_dict() for album in albuns])

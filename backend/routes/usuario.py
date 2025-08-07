@@ -22,7 +22,7 @@ def verify_password(plain_password, hashed_password):
 
 
 @account_bp.route('', methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def create_user():
     data = request.get_json()
     db_user = get_user_by_email(data.get('email'))

@@ -9,14 +9,12 @@ db = get_db()
 @comentario_tags_bp.route('', methods=['GET'])
 @jwt_required()
 def get_comentario_tags():
-    # Implement logic to retrieve all comentario_tags from the database
     comentario_tags = db.query(ComentarioTag).all()
     return jsonify([comentario_tag.to_dict() for comentario_tag in comentario_tags])
 
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['GET'])
 @jwt_required()
 def get_comentario_tag(comentario_id, tag_id):
-    # Implement logic to retrieve a specific comentario_tag by ID from the database
     comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()
     if comentario_tag:
         return jsonify(comentario_tag.to_dict())
@@ -25,7 +23,6 @@ def get_comentario_tag(comentario_id, tag_id):
 @comentario_tags_bp.route('', methods=['POST'])
 @jwt_required()
 def create_comentario_tag():
-    # Implement logic to create a new comentario_tag in the database
     data = request.get_json()
     comentario_id = data['comentario_id']
     tag_id = data['tag_id']
@@ -37,7 +34,6 @@ def create_comentario_tag():
 @comentario_tags_bp.route('/<uuid:comentario_id>/<int:tag_id>', methods=['DELETE'])
 @jwt_required()
 def delete_comentario_tag(comentario_id, tag_id):
-    # Implement logic to delete a specific comentario_tag by ID from the database
     comentario_tag = db.query(ComentarioTag).filter(ComentarioTag.comentario_id == comentario_id, ComentarioTag.tag_id == tag_id).first()
     if comentario_tag:
         db.delete(comentario_tag)
