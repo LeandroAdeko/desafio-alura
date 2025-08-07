@@ -14,7 +14,7 @@ Para executar a aplicação utilizando o Docker Compose, siga os passos abaixo:
 Usuário administrador:
 - Email:    admin@admin.com
 - Senha:    123456
-- 
+
 Usuário comum:
 - Email:    normal@normal.com
 - Senha:    123456
