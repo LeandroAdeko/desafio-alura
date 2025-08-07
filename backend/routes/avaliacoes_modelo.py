@@ -7,14 +7,14 @@ avaliacoes_modelo_bp = Blueprint('avaliacoes_modelo', __name__, url_prefix='/ava
 db = get_db()
 
 @avaliacoes_modelo_bp.route('', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_avaliacoes_modelo():
     # Implement logic to retrieve all avaliacoes_modelo from the database
     avaliacoes_modelo = db.query(AvaliacaoModelo).all()
     return jsonify([avaliacao_modelo.to_dict() for avaliacao_modelo in avaliacoes_modelo])
 
 @avaliacoes_modelo_bp.route('/<int:id>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_avaliacao_modelo(id):
     # Implement logic to retrieve a specific avaliacao_modelo by ID from the database
     avaliacao_modelo = db.query(AvaliacaoModelo).filter(AvaliacaoModelo.id == id).first()
@@ -23,7 +23,7 @@ def get_avaliacao_modelo(id):
     return jsonify({'message': 'Avaliacao modelo not found'})
 
 @avaliacoes_modelo_bp.route('', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def create_avaliacao_modelo():
     # Implement logic to create a new avaliacao_modelo in the database
     data = request.get_json()
@@ -37,7 +37,7 @@ def create_avaliacao_modelo():
     return jsonify(new_avaliacao_modelo.to_dict())
 
 @avaliacoes_modelo_bp.route('/<int:id>', methods=['PUT'])
-#@jwt_required()
+@jwt_required()
 def update_avaliacao_modelo(id):
     # Implement logic to update an existing avaliacao_modelo in the database
     data = request.get_json()
@@ -60,7 +60,7 @@ def update_avaliacao_modelo(id):
     return jsonify({'message': 'Avaliacao modelo not found'})
 
 @avaliacoes_modelo_bp.route('/<int:id>', methods=['DELETE'])
-#@jwt_required()
+@jwt_required()
 def delete_avaliacao_modelo(id):
     # Implement logic to delete a specific avaliacao_modelo by ID from the database
     avaliacao_modelo = db.query(AvaliacaoModelo).filter(AvaliacaoModelo.id == id).first()

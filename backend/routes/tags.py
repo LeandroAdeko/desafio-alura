@@ -7,14 +7,14 @@ tags_bp = Blueprint('tags', __name__, url_prefix='/tags')
 db = get_db()
 
 @tags_bp.route('', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_tags():
     # Implement logic to retrieve all tags from the database
     tags = db.query(Tag).all()
     return jsonify([tag.to_dict() for tag in tags])
 
 @tags_bp.route('/<int:id>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_tag(id):
     # Implement logic to retrieve a specific tag by ID from the database
     tag = db.query(Tag).filter(Tag.id == id).first()
@@ -23,7 +23,7 @@ def get_tag(id):
     return jsonify({'message': 'Tag not found'})
 
 @tags_bp.route('', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def create_tag():
     # Implement logic to create a new tag in the database
     data = request.get_json()
@@ -35,7 +35,7 @@ def create_tag():
     return jsonify(new_tag.to_dict())
 
 @tags_bp.route('/<int:id>', methods=['PUT'])
-#@jwt_required()
+@jwt_required()
 def update_tag(id):
     # Implement logic to update an existing tag in the database
     data = request.get_json()
@@ -52,7 +52,7 @@ def update_tag(id):
     return jsonify({'message': 'Tag not found'})
 
 @tags_bp.route('/<int:id>', methods=['DELETE'])
-#@jwt_required()
+@jwt_required()
 def delete_tag(id):
     # Implement logic to delete a specific tag by ID from the database
     tag = db.query(Tag).filter(Tag.id == id).first()

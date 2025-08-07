@@ -22,7 +22,7 @@ def verify_password(plain_password, hashed_password):
 
 
 @account_bp.route('', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def create_user():
     data = request.get_json()
     db_user = get_user_by_email(data.get('email'))
@@ -60,7 +60,7 @@ def login():
 
 
 @account_bp.route('/<int:id>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_user(id):
     user = db.query(Usuario).filter(Usuario.id == id).first()
     if user:
@@ -69,7 +69,7 @@ def get_user(id):
 
 
 @account_bp.route('', methods=['PATCH'])
-#@jwt_required()
+@jwt_required()
 def update_password():
     data = request.get_json()
     id = data.get('id')
@@ -93,7 +93,7 @@ def update_password():
 
     
 @account_bp.route('', methods=['DELETE'])
-#@jwt_required()
+@jwt_required()
 def delete_usuario():
     data = request.get_json()
 
@@ -109,7 +109,7 @@ def delete_usuario():
 
 
 @account_bp.route("/protected", methods=["GET"])
-#@jwt_required()
+@jwt_required()
 def protected():
     # Access the identity of the current user with get_jwt_identity
     current_user = get_jwt_identity()

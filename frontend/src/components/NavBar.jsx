@@ -1,6 +1,4 @@
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link} from "react-router-dom";
-import { useState, useEffect } from 'react';
 import AuthRequired from "./AuthRequired";
 
 import Home from "../pages/Home";
@@ -8,6 +6,7 @@ import LoginScreen from "../pages/Login";
 import Comentarios from "../pages/Comentarios";
 import Cadastros from "../pages/Cadastros";
 import Relatorios from "../pages/Relatorios";
+import AreaDoArtista from "../pages/Comentarios/TelaComentario";
 
 
 function NavBar() {
@@ -53,6 +52,11 @@ function NavBar() {
             <Route path="/relatorios" element={
                 <AuthRequired loginRequired adminRequired>
                     <Relatorios />
+                </AuthRequired>} />
+
+            <Route path="/artistas/:id" element={
+                <AuthRequired loginRequired>
+                    <AreaDoArtista />
                 </AuthRequired>} />
         </Routes>
         </BrowserRouter>

@@ -8,7 +8,7 @@ artistas_bp = Blueprint('artistas', __name__, url_prefix='/artistas')
 db = get_db()
 
 @artistas_bp.route('', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_artistas():
     # Implement logic to retrieve all artistas from the database
     artistas = db.query(Artista).all()
@@ -17,7 +17,7 @@ def get_artistas():
     return jsonify(result)
 
 @artistas_bp.route('/<int:id>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_artista(id):
     # Implement logic to retrieve a specific artista by ID from the database
     artista = db.query(Artista).filter(Artista.id == id).first()
@@ -26,7 +26,7 @@ def get_artista(id):
     return jsonify({'message': 'Artista not found'})
 
 @artistas_bp.route('', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def create_artista():
     data = request.get_json()
     nome = data['nome']
@@ -36,7 +36,7 @@ def create_artista():
     return jsonify(new_artista.to_dict())
 
 @artistas_bp.route('/<int:id>', methods=['PUT'])
-#@jwt_required()
+@jwt_required()
 def update_artista(id):
     data = request.get_json()
     artista = db.query(Artista).filter(Artista.id == id).first()
@@ -49,7 +49,7 @@ def update_artista(id):
     return jsonify({'message': 'Artista not found'})
 
 @artistas_bp.route('/<int:id>', methods=['DELETE'])
-#@jwt_required()
+@jwt_required()
 def delete_artista(id):
     # Implement logic to delete a specific artista by ID from the database
     artista = db.query(Artista).filter(Artista.id == id).first()

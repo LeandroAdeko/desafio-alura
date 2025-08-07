@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { listAll } from '../../services/crud';
@@ -34,9 +32,9 @@ function Home() {
             <ul>
                 {artistas.map(artista => (
                     <li key={artista.id}>
-                        <Link to={`/artistas/${artista.id}`}>
+                        {/* <Link to={`/artistas/${artista.id}`}> */}
                             {artista.nome}
-                        </Link>
+                        {/* </Link> */}
                     </li>
                 ))}
             </ul>
@@ -46,9 +44,9 @@ function Home() {
             <ul>
                 {albuns.map(album => (
                     <li key={album.id}>
-                        <Link to={`/albuns/${album.id}`}>
+                        {/* <Link to={`/artistas/${album.artista_id}`}> */}
                             {album.nome}
-                        </Link>
+                        {/* </Link> */}
                     </li>
                 ))}
             </ul>
@@ -59,9 +57,9 @@ function Home() {
             <ul>
                 {shows.map(show => (
                     <li key={show.id}>
-                        <Link to={`/shows/${show.id}`}>
+                        {/* <Link to={`/artistas/${show.artista_id}`}> */}
                             {show.nome}
-                        </Link>
+                        {/* </Link> */}
                     </li>
                 ))}
             </ul>

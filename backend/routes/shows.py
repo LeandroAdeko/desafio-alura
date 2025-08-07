@@ -7,14 +7,14 @@ shows_bp = Blueprint('shows', __name__, url_prefix='/shows')
 db = get_db()
 
 @shows_bp.route('', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_shows():
     # Implement logic to retrieve all shows from the database
     shows = db.query(Show).all()
     return jsonify([show.to_dict() for show in shows])
 
 @shows_bp.route('/<int:id>', methods=['GET'])
-#@jwt_required()
+@jwt_required()
 def get_show(id):
     # Implement logic to retrieve a specific show by ID from the database
     show = db.query(Show).filter(Show.id == id).first()
@@ -23,7 +23,7 @@ def get_show(id):
     return jsonify({'message': 'Show not found'})
 
 @shows_bp.route('', methods=['POST'])
-#@jwt_required()
+@jwt_required()
 def create_show():
     # Implement logic to create a new show in the database
     data = request.get_json()
@@ -36,7 +36,7 @@ def create_show():
     return jsonify(new_show.to_dict())
 
 @shows_bp.route('/<int:id>', methods=['PUT'])
-#@jwt_required()
+@jwt_required()
 def update_show(id):
     # Implement logic to update an existing show in the database
     data = request.get_json()
@@ -56,7 +56,7 @@ def update_show(id):
     return jsonify({'message': 'Show not found'})
 
 @shows_bp.route('/<int:id>', methods=['DELETE'])
-#@jwt_required()
+@jwt_required()
 def delete_show(id):
     # Implement logic to delete a specific show by ID from the database
     show = db.query(Show).filter(Show.id == id).first()

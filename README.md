@@ -9,3 +9,8 @@ Para executar a aplicação utilizando o Docker Compose, siga os passos abaixo:
 2.  Abra o terminal na pasta raiz do projeto (onde o arquivo `docker-compose.yml` está localizado).
 3.  Execute o comando `docker-compose up --build`. Este comando irá construir as imagens e iniciar os containers.
 4.  Acesse a aplicação no seu navegador em `http://localhost:3000`.
+
+
+Usuário administrador:
+- Email:    admin@admin.com
+- Senha:    123

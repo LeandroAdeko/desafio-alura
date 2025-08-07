@@ -7,13 +7,12 @@ function AuthRequired({ adminRequired = false, loginRequired = false, onlyNotLog
     const accessToken = localStorage.getItem("accessToken");
     const isAdmin = localStorage.getItem("isAdmin") === 'true';
   
-    // null = ainda verificando, false = acesso negado, true = autorizado
     const [allowed, setAllowed] = useState(null);
   
     useEffect(() => {
-      // prioriza exclusividade: onlyNotLogged > loginRequired
       if (onlyNotLogged && accessToken) {
         alert("Você já está logado.");
+        navigate('/', { replace: true }); 
         setAllowed(false);
         return;
       }
@@ -27,7 +26,7 @@ function AuthRequired({ adminRequired = false, loginRequired = false, onlyNotLog
   
       if (adminRequired && !isAdmin) {
         alert("Você não possui permissão de acesso!");
-        navigate('/', { replace: true }); // ou outra rota de “sem acesso”
+        navigate('/', { replace: true }); 
         setAllowed(false);
         return;
       }
